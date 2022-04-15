@@ -1,0 +1,34 @@
+{
+	"name": "mock-property",
+	"version": "0.0.0",
+	"description": "Given an object and a property, replaces a property descriptor (or deletes it), and returns a thunk to restore it.",
+	"main": "index.js",
+	"exports": {
+		".": "./index.js",
+		"./package.json": "./package.json"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ljharb/mock-property.git"
+	},
+	"keywords": [
+		"testing",
+		"mock",
+		"object",
+		"property",
+		"value",
+		"descriptor",
+		"test",
+		"delete",
+		"define"
+	],
+	"author": "Jordan Harband <ljharb@gmail.com>",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/ljharb/mock-property/issues"
+	},
+	"homepage": "https://github.com/ljharb/mock-property#readme"
+}
