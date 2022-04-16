@@ -1,6 +1,6 @@
 {
 	"name": "mock-property",
-	"version": "0.0.0",
+	"version": "1.0.0",
 	"description": "Given an object and a property, replaces a property descriptor (or deletes it), and returns a thunk to restore it.",
 	"main": "index.js",
 	"exports": {
