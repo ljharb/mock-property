@@ -60,7 +60,7 @@
 		"tape": "^5.6.1"
 	},
 	"dependencies": {
-		"functions-have-names": "^1.2.2",
+		"functions-have-names": "^1.2.3",
 		"has": "^1.0.3",
 		"has-property-descriptors": "^1.0.0",
 		"isarray": "^2.0.5"
