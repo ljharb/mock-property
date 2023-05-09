@@ -34,7 +34,7 @@ module.exports = function mockProperty(obj, prop, options) {
 		}
 		if (
 			(has(options, 'get') && typeof options.get !== 'function' && typeof options.get !== 'undefined')
-            || (has(options, 'set') && typeof options.set !== 'function' && typeof options.set !== 'undefined')
+			|| (has(options, 'set') && typeof options.set !== 'function' && typeof options.set !== 'undefined')
 		) {
 			throw new $TypeError('`get` and `set` options, when present, must be functions or `undefined`');
 		}
@@ -106,11 +106,11 @@ module.exports = function mockProperty(obj, prop, options) {
 		delete obj[prop]; // eslint-disable-line no-param-reassign
 	} else if (
 		wantsData
-            && !isChangingEnumerability
-            && (!origDescriptor || origDescriptor.enumerable)
-            && (!has(options, 'nonWritable') || !options.nonWritable)
-            && (!origDescriptor || origDescriptor.writable)
-            && (!gOPD || !(prop in obj))
+		&& !isChangingEnumerability
+		&& (!origDescriptor || origDescriptor.enumerable)
+		&& (!has(options, 'nonWritable') || !options.nonWritable)
+		&& (!origDescriptor || origDescriptor.writable)
+		&& (!gOPD || !(prop in obj))
 	) {
 		obj[prop] = options.value; // eslint-disable-line no-param-reassign
 	} else {

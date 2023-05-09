@@ -19,11 +19,11 @@ var assert = require('assert');
 
 var i = 0;
 var object = {
-    a: 1,
-    get b() {
-        i += 1;
-        return 'b ' + i;
-    }
+	a: 1,
+	get b() {
+		i += 1;
+		return 'b ' + i;
+	}
 };
 
 assert.equal(object.a, 1);
