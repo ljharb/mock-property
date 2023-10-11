@@ -57,7 +57,7 @@
 		"nyc": "^10.3.2",
 		"object-inspect": "^1.12.3",
 		"safe-publish-latest": "^2.0.0",
-		"tape": "^5.7.0"
+		"tape": "^5.7.1"
 	},
 	"dependencies": {
 		"define-data-property": "^1.1.0",
