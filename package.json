@@ -85,5 +85,13 @@
 		"ignore": [
 			".github/workflows"
 		]
+	},
+	"overrides": {
+		"npm-lockfile": {
+			"@npmcli/arborist": "6"
+		},
+		"tape": {
+			"mock-property@1": "file://../../"
+		}
 	}
 }
