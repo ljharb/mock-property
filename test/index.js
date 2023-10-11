@@ -118,7 +118,7 @@ test('mockProperty', function (t) {
 		st.end();
 	});
 
-	t.test('data: enumerable -> nonEnumerable', function (st) {
+	t.test('data: enumerable -> nonEnumerable', { skip: !hasPropertyDescriptors() }, function (st) {
 		var obj = { a: sentinel };
 		st.ok(Object.prototype.propertyIsEnumerable.call(obj, 'a'), 'starts enumerable');
 
