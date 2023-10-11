@@ -5,11 +5,11 @@ var hasPropertyDescriptors = require('has-property-descriptors');
 var isArray = require('isarray');
 var functionsHaveConfigurableNames = require('functions-have-names').functionsHaveConfigurableNames();
 
+var gOPD = require('gopd');
+
 var $defineProperty = hasPropertyDescriptors() && Object.defineProperty;
 
 var hasArrayLengthDefineBug = hasPropertyDescriptors.hasArrayLengthDefineBug();
-
-var gOPD = Object.getOwnPropertyDescriptor;
 
 var $TypeError = TypeError;
 var $SyntaxError = SyntaxError;

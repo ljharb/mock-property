@@ -61,9 +61,16 @@
 	},
 	"dependencies": {
 		"functions-have-names": "^1.2.3",
+		"gopd": "^1.0.1",
 		"has": "^1.0.3",
 		"has-property-descriptors": "^1.0.0",
 		"isarray": "^2.0.5"
+	},
+	"engines": {
+		"node": ">= 0.4"
+	},
+	"testling": {
+		"files": "test/index.js"
 	},
 	"publishConfig": {
 		"ignore": [
