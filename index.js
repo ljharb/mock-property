@@ -28,6 +28,10 @@ module.exports = function mockProperty(obj, prop, options) {
 	var wantsData = has(options, 'value') || has(options, 'nonWritable');
 	var wantsAccessor = has(options, 'get') || has(options, 'set');
 
+	if (options['delete'] && (wantsData || wantsAccessor || has(options, 'nonEnumerable'))) {
+		throw new $TypeError('`delete` option must not be set to true when any of `value`, `get`, `set`, `nonWritable`, or `nonEnumerable` are provided');
+	}
+
 	if (wantsAccessor) {
 		if (wantsData) {
 			throw new $TypeError('`value` and `nonWritable` options are mutually exclusive with `get`/`set` options');
@@ -41,9 +45,6 @@ module.exports = function mockProperty(obj, prop, options) {
 		if (!gOPD || !$defineProperty) {
 			throw new $SyntaxError('the `get`/`set` options require native getter/setter support');
 		}
-	}
-	if (options['delete'] && (wantsData || wantsAccessor || has(options, 'nonEnumerable'))) {
-		throw new $TypeError('`delete` option must not be set to true when any of `value`, `get`, `set`, `nonWritable`, or `nonEnumerable` are provided');
 	}
 
 	var objIsArray = isArray(obj);
