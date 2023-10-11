@@ -7,7 +7,8 @@ var functionsHaveConfigurableNames = require('functions-have-names').functionsHa
 var gOPD = require('gopd');
 var defineDataProperty = require('define-data-property');
 
-var $defineProperty = hasPropertyDescriptors() && Object.defineProperty;
+var hasDescriptors = hasPropertyDescriptors();
+var $defineProperty = hasDescriptors && Object.defineProperty;
 
 var hasArrayLengthDefineBug = hasPropertyDescriptors.hasArrayLengthDefineBug();
 
@@ -53,7 +54,7 @@ module.exports = function mockProperty(obj, prop, options) {
 		: has(obj, prop)
 			? {
 				configurable: typeof obj === 'function' && prop === 'name' ? functionsHaveConfigurableNames : true,
-				enumerable: !(objIsArray && prop === 'length'),
+				enumerable: !(hasDescriptors && objIsArray && prop === 'length'),
 				value: obj[prop],
 				writable: true
 			}
