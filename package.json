@@ -73,6 +73,14 @@
 	"testling": {
 		"files": "test/index.js"
 	},
+	"auto-changelog": {
+		"output": "CHANGELOG.md",
+		"template": "keepachangelog",
+		"unreleased": false,
+		"commitLimit": false,
+		"backfillLimit": false,
+		"hideCredit": true
+	},
 	"publishConfig": {
 		"ignore": [
 			".github/workflows"
