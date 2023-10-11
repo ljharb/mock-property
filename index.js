@@ -4,8 +4,8 @@ var has = require('has');
 var hasPropertyDescriptors = require('has-property-descriptors');
 var isArray = require('isarray');
 var functionsHaveConfigurableNames = require('functions-have-names').functionsHaveConfigurableNames();
-
 var gOPD = require('gopd');
+var defineDataProperty = require('define-data-property');
 
 var $defineProperty = hasPropertyDescriptors() && Object.defineProperty;
 
@@ -124,12 +124,13 @@ module.exports = function mockProperty(obj, prop, options) {
 		var newEnumerable = has(options, 'nonEnumerable') ? !options.nonEnumerable : origEnumerable;
 
 		if (wantsData) {
-			$defineProperty(obj, prop, {
-				configurable: origConfigurable,
-				enumerable: newEnumerable,
-				value: has(options, 'value') ? options.value : origDescriptor.value,
-				writable: has(options, 'nonWritable') ? !options.nonWritable : has(origDescriptor, 'writable') ? origDescriptor.writable : true
-			});
+			defineDataProperty(
+				obj,
+				prop,
+				has(options, 'value') ? options.value : origDescriptor.value,
+				!newEnumerable,
+				has(options, 'nonWritable') ? options.nonWritable : has(origDescriptor, 'writable') ? !origDescriptor.writable : false
+			);
 		} else if (wantsAccessor) {
 			var getter = has(options, 'get') ? options.get : origDescriptor && origDescriptor.get;
 			var setter = has(options, 'set') ? options.set : origDescriptor && origDescriptor.set;
@@ -141,10 +142,12 @@ module.exports = function mockProperty(obj, prop, options) {
 				set: setter
 			});
 		} else {
-			$defineProperty(obj, prop, {
-				configurable: origConfigurable,
-				enumerable: newEnumerable
-			});
+			defineDataProperty(
+				obj,
+				prop,
+				origDescriptor.value,
+				!newEnumerable
+			);
 		}
 	}
 
@@ -153,12 +156,14 @@ module.exports = function mockProperty(obj, prop, options) {
 			delete obj[prop]; // eslint-disable-line no-param-reassign
 		} else if ($defineProperty) {
 			if (has(origDescriptor, 'writable')) {
-				$defineProperty(obj, prop, {
-					configurable: origDescriptor.configurable,
-					enumerable: origDescriptor.enumerable,
-					value: origDescriptor.value,
-					writable: origDescriptor.writable
-				});
+				defineDataProperty(
+					obj,
+					prop,
+					origDescriptor.value,
+					!origDescriptor.enumerable,
+					!origDescriptor.writable,
+					!origDescriptor.configurable
+				);
 			} else {
 				var oldGetter = origDescriptor && origDescriptor.get;
 				var oldSetter = origDescriptor && origDescriptor.set;
