@@ -50,12 +50,14 @@ module.exports = function mockProperty(obj, prop, options) {
 	var objIsArray = isArray(obj);
 	var origDescriptor = gOPD
 		? gOPD(obj, prop)
-		: {
-			configurable: typeof obj === 'function' && prop === 'name' ? functionsHaveConfigurableNames : true,
-			enumerable: !(objIsArray && prop === 'length'),
-			value: obj[prop],
-			writable: true
-		};
+		: has(obj, prop)
+			? {
+				configurable: typeof obj === 'function' && prop === 'name' ? functionsHaveConfigurableNames : true,
+				enumerable: !(objIsArray && prop === 'length'),
+				value: obj[prop],
+				writable: true
+			}
+			: void undefined;
 
 	var origConfigurable = origDescriptor ? origDescriptor.configurable : true;
 	var origEnumerable = origDescriptor ? origDescriptor.enumerable : true;
