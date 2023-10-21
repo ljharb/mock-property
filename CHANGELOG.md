@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.3](https://github.com/ljharb/mock-property/compare/v1.0.2...v1.0.3) - 2023-10-20
+
+### Commits
+
+- [Refactor] use `hasown` instead of `has` [`da0d497`](https://github.com/ljharb/mock-property/commit/da0d497e819a060b75c94027bf92cddc52777540)
+- [Dev Deps] update `object-inspect`, `tape` [`0b14b22`](https://github.com/ljharb/mock-property/commit/0b14b22346754bbf2e700c49863597ff3836dc14)
+- [Deps] update `define-data-property` [`538289b`](https://github.com/ljharb/mock-property/commit/538289b8ab7b8f4d06dfa7be01532819157925b9)
+
 ## [v1.0.2](https://github.com/ljharb/mock-property/compare/v1.0.1...v1.0.2) - 2023-10-11
 
 ## [v1.0.1](https://github.com/ljharb/mock-property/compare/v1.0.0...v1.0.1) - 2023-10-11
