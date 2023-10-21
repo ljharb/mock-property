@@ -60,7 +60,7 @@
 		"tape": "^5.7.2"
 	},
 	"dependencies": {
-		"define-data-property": "^1.1.0",
+		"define-data-property": "^1.1.1",
 		"functions-have-names": "^1.2.3",
 		"gopd": "^1.0.1",
 		"has": "^1.0.3",
