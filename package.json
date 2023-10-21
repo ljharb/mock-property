@@ -55,9 +55,9 @@
 		"in-publish": "^2.0.1",
 		"npmignore": "^0.3.0",
 		"nyc": "^10.3.2",
-		"object-inspect": "^1.12.3",
+		"object-inspect": "^1.13.1",
 		"safe-publish-latest": "^2.0.0",
-		"tape": "^5.7.1"
+		"tape": "^5.7.2"
 	},
 	"dependencies": {
 		"define-data-property": "^1.1.0",
