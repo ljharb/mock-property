@@ -60,11 +60,11 @@
 		"tape": "^5.8.1"
 	},
 	"dependencies": {
-		"define-data-property": "^1.1.1",
+		"define-data-property": "^1.1.4",
 		"functions-have-names": "^1.2.3",
 		"gopd": "^1.0.1",
-		"has-property-descriptors": "^1.0.0",
-		"hasown": "^2.0.0",
+		"has-property-descriptors": "^1.0.2",
+		"hasown": "^2.0.2",
 		"isarray": "^2.0.5"
 	},
 	"engines": {
