@@ -6,6 +6,7 @@ var isArray = require('isarray');
 var functionsHaveConfigurableNames = require('functions-have-names').functionsHaveConfigurableNames();
 var gOPD = require('gopd');
 var defineDataProperty = require('define-data-property');
+var inspect = require('object-inspect');
 
 var hasDescriptors = hasPropertyDescriptors();
 var $defineProperty = hasDescriptors && Object.defineProperty;
@@ -76,30 +77,30 @@ module.exports = function mockProperty(obj, prop, options) {
 	var isChangingEnumerability = hasOwn(options, 'nonEnumerable') ? !options.nonEnumerable !== origEnumerable : false;
 	if (origDescriptor && !origDescriptor.configurable) {
 		if (isChangingEnumerability) {
-			throw new $TypeError('`' + prop + '` is nonconfigurable, and can not be changed');
+			throw new $TypeError('`' + inspect(prop) + '` is nonconfigurable, and can not be changed');
 		}
 		if (wantsAccessor) {
 			if (hasOwn(origDescriptor, 'value')) {
-				throw new $TypeError('`' + prop + '` is a nonconfigurable data property, and can not be changed to an accessor');
+				throw new $TypeError('`' + inspect(prop) + '` is a nonconfigurable data property, and can not be changed to an accessor');
 			}
 
 			var isChangingGetter = hasOwn(options, 'get') && hasOwn(origDescriptor, 'get') && options.get !== origDescriptor.get;
 			var isChangingSetter = hasOwn(options, 'set') && hasOwn(origDescriptor, 'set') && options.set !== origDescriptor.set;
 
 			if (isChangingGetter || isChangingSetter) {
-				throw new $TypeError('`' + prop + '` is nonconfigurable, and can not be changed');
+				throw new $TypeError('`' + inspect(prop) + '` is nonconfigurable, and can not be changed');
 			}
 			return function restore() {};
 		}
 		if (hasOwn(origDescriptor, 'get') || hasOwn(origDescriptor, 'set')) {
-			throw new $TypeError('`' + prop + '` is a nonconfigurable accessor property, and can not be changed to a data property');
+			throw new $TypeError('`' + inspect(prop) + '` is a nonconfigurable accessor property, and can not be changed to a data property');
 		}
 
 		var isChangingValue = hasOwn(options, 'value') && hasOwn(origDescriptor, 'value') && options.value !== origDescriptor.value;
 		var isChangingWriteability = hasOwn(options, 'nonWritable') && !options.nonWritable !== origDescriptor.writable;
 
 		if ((!origDescriptor.writable && isChangingValue) || isChangingEnumerability || isChangingWriteability) {
-			throw new $TypeError('`' + prop + '` is nonconfigurable, and can not be changed');
+			throw new $TypeError('`' + inspect(prop) + '` is nonconfigurable, and can not be changed');
 		}
 		if (!isChangingWriteability && !isChangingValue) {
 			return function restore() {};

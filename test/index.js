@@ -5,6 +5,7 @@ var hasPropertyDescriptors = require('has-property-descriptors');
 var v = require('es-value-fixtures');
 var forEach = require('for-each');
 var inspect = require('object-inspect');
+var hasSymbols = require('has-symbols')();
 
 var mockProperty = require('../');
 
@@ -12,7 +13,7 @@ var sentinel = { sentinel: true };
 var getter = function () {};
 var setter = function (value) {}; // eslint-disable-line no-unused-vars
 
-var props = ['string property'];
+var props = ['string property'].concat(hasSymbols ? Symbol.iterator : []);
 
 test('mockProperty', function (t) {
 	t.equal(typeof mockProperty, 'function', 'is a function');
