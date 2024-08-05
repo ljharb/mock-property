@@ -129,7 +129,7 @@ module.exports = function mockProperty(obj, prop, options) {
 			defineDataProperty(
 				obj,
 				prop,
-				hasOwn(options, 'value') ? options.value : origDescriptor.value,
+				hasOwn(options, 'value') ? options.value : origDescriptor && origDescriptor.value,
 				!newEnumerable,
 				hasOwn(options, 'nonWritable') ? options.nonWritable : hasOwn(origDescriptor, 'writable') ? !origDescriptor.writable : false
 			);
@@ -147,7 +147,7 @@ module.exports = function mockProperty(obj, prop, options) {
 			defineDataProperty(
 				obj,
 				prop,
-				origDescriptor.value,
+				origDescriptor && origDescriptor.value,
 				!newEnumerable
 			);
 		}

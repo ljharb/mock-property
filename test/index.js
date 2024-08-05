@@ -1233,5 +1233,17 @@ test('mockProperty', function (t) {
 		st.end();
 	});
 
+	t.test('mocking a nonexistent data property, nonenumerable, with no value', function (st) {
+		var obj = {};
+
+		mockProperty(obj, 'foo', { nonEnumerable: true, nonWritable: false });
+		mockProperty(obj, 'bar', { nonEnumerable: true });
+
+		st.ok('foo' in obj, 'property "foo" exists');
+		st.ok('bar' in obj, 'property "bar" exists');
+
+		st.end();
+	});
+
 	t.end();
 });
