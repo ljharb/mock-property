@@ -16,6 +16,7 @@ var hasArrayLengthDefineBug = hasPropertyDescriptors.hasArrayLengthDefineBug();
 var $TypeError = TypeError;
 var $SyntaxError = SyntaxError;
 
+/** @type {import('.')} */
 module.exports = function mockProperty(obj, prop, options) {
 	if (hasOwn(options, 'nonEnumerable') && typeof options.nonEnumerable !== 'boolean') {
 		throw new $TypeError('`nonEnumerable` option, when present, must be a boolean');
@@ -61,8 +62,8 @@ module.exports = function mockProperty(obj, prop, options) {
 			}
 			: void undefined;
 
-	var origConfigurable = origDescriptor ? origDescriptor.configurable : true;
-	var origEnumerable = origDescriptor ? origDescriptor.enumerable : true;
+	var origConfigurable = origDescriptor ? !!origDescriptor.configurable : true;
+	var origEnumerable = origDescriptor ? !!origDescriptor.enumerable : true;
 
 	if (wantsAccessor) {
 		var hasGetter = origDescriptor && typeof origDescriptor.get === 'function';
@@ -108,6 +109,7 @@ module.exports = function mockProperty(obj, prop, options) {
 	}
 
 	if (options['delete']) {
+		// @ts-expect-error TS can't handle indexing properly here
 		delete obj[prop]; // eslint-disable-line no-param-reassign
 	} else if (
 		wantsData
@@ -117,6 +119,7 @@ module.exports = function mockProperty(obj, prop, options) {
 		&& (!origDescriptor || origDescriptor.writable)
 		&& (!gOPD || !(prop in obj))
 	) {
+		// @ts-expect-error TS can't handle indexing properly here
 		obj[prop] = options.value; // eslint-disable-line no-param-reassign
 	} else {
 		if (objIsArray && prop === 'length' && hasArrayLengthDefineBug) {
@@ -127,7 +130,8 @@ module.exports = function mockProperty(obj, prop, options) {
 
 		if (wantsData) {
 			defineDataProperty(
-				obj,
+				// eslint-disable-next-line no-extra-parens
+				/** @type {Record<PropertyKey, unknown>} */ (obj),
 				prop,
 				hasOwn(options, 'value') ? options.value : origDescriptor && origDescriptor.value,
 				!newEnumerable,
@@ -137,7 +141,9 @@ module.exports = function mockProperty(obj, prop, options) {
 			var getter = hasOwn(options, 'get') ? options.get : origDescriptor && origDescriptor.get;
 			var setter = hasOwn(options, 'set') ? options.set : origDescriptor && origDescriptor.set;
 
-			$defineProperty(obj, prop, {
+			/** @type {Exclude<typeof $defineProperty, false>} */
+			// eslint-disable-next-line no-extra-parens
+			($defineProperty)(obj, prop, {
 				configurable: origConfigurable,
 				enumerable: newEnumerable,
 				get: getter,
@@ -145,7 +151,8 @@ module.exports = function mockProperty(obj, prop, options) {
 			});
 		} else {
 			defineDataProperty(
-				obj,
+				// eslint-disable-next-line no-extra-parens
+				/** @type {Record<PropertyKey, unknown>} */ (obj),
 				prop,
 				origDescriptor && origDescriptor.value,
 				!newEnumerable
@@ -155,11 +162,13 @@ module.exports = function mockProperty(obj, prop, options) {
 
 	return function restore() {
 		if (!origDescriptor) {
+			// @ts-expect-error TS can't handle indexing properly here
 			delete obj[prop]; // eslint-disable-line no-param-reassign
 		} else if ($defineProperty) {
 			if (hasOwn(origDescriptor, 'writable')) {
 				defineDataProperty(
-					obj,
+					// eslint-disable-next-line no-extra-parens
+					/** @type {Record<PropertyKey, unknown>} */ (obj),
 					prop,
 					origDescriptor.value,
 					!origDescriptor.enumerable,
@@ -178,6 +187,7 @@ module.exports = function mockProperty(obj, prop, options) {
 				});
 			}
 		} else {
+			// @ts-expect-error TS can't handle indexing properly here
 			obj[prop] = origDescriptor.value; // eslint-disable-line no-param-reassign
 		}
 	};
