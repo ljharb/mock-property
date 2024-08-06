@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.1.0](https://github.com/ljharb/mock-property/compare/v1.0.3...v1.1.0) - 2024-08-06
+
+### Commits
+
+- [Tests] refactor tests for easier testing of multiple properties [`605c32e`](https://github.com/ljharb/mock-property/commit/605c32e8bc3c53320fe9c5eb7fd3836c55607443)
+- [New] add types [`848be58`](https://github.com/ljharb/mock-property/commit/848be58428a8d17d46d083c8978138c432b7dfeb)
+- [Fix] properly stringify Symbol properties [`369d824`](https://github.com/ljharb/mock-property/commit/369d8247d1dd840390a1f6bfe6afa239023b0e37)
+- [Fix] avoid a crash when mocking a nonexistent data property as non-enumerable sans a value [`9994626`](https://github.com/ljharb/mock-property/commit/99946267704fd87f9044372ce016b48f4edb8081)
+- [Dev Deps] update `@ljharb/eslint-config`, `aud`,` npmignore`, `object-inspect`, `tape` [`ebfaf9a`](https://github.com/ljharb/mock-property/commit/ebfaf9a2c3882fb1adcbd68df418c134cd39e85e)
+- [Dev Deps] ensure tape’s mock-property is ourself, for testing [`2deaf72`](https://github.com/ljharb/mock-property/commit/2deaf72e8cb486b6044f9fb3a142f321107e7939)
+- [Deps] update `define-data-property`, `has-property-descriptors`, `hasown` [`e9f503d`](https://github.com/ljharb/mock-property/commit/e9f503dd782f2d6c8531f4020a9a275badcb6d0c)
+- [Tests] switch from `aud` to `npm audit` [`f5e6ce2`](https://github.com/ljharb/mock-property/commit/f5e6ce2b80d978aa7b6f8af38446ee67c1ae44ce)
+- [meta] add `sideEffects` flag [`2089940`](https://github.com/ljharb/mock-property/commit/2089940cb0717102275bbac85708e9bf74d732e0)
+
 ## [v1.0.3](https://github.com/ljharb/mock-property/compare/v1.0.2...v1.0.3) - 2023-10-20
 
 ### Commits
