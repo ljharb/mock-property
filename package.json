@@ -48,7 +48,7 @@
 	},
 	"homepage": "https://github.com/ljharb/mock-property#readme",
 	"devDependencies": {
-		"@arethetypeswrong/cli": "^0.15.3",
+		"@arethetypeswrong/cli": "^0.15.4",
 		"@ljharb/eslint-config": "^21.1.1",
 		"@ljharb/tsconfig": "^0.2.0",
 		"@types/es-value-fixtures": "^1.4.4",
