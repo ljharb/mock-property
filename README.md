@@ -63,5 +63,5 @@ Please email [@ljharb](https://github.com/ljharb) or see https://tidelift.com/se
 [downloads-url]: https://npm-stat.com/charts.html?package=mock-property
 [codecov-image]: https://codecov.io/gh/ljharb/mock-property/branch/main/graphs/badge.svg
 [codecov-url]: https://app.codecov.io/gh/ljharb/mock-property/
-[actions-image]: https://img.shields.io/endpoint?url=https://github-actions-badge-u3jn4tfpocch.runkit.sh/ljharb/mock-property
+[actions-image]: https://img.shields.io/github/check-runs/ljharb/mock-property/main
 [actions-url]: https://github.com/ljharb/mock-property/actions
