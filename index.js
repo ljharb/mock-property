@@ -8,13 +8,13 @@ var gOPD = require('gopd');
 var defineDataProperty = require('define-data-property');
 var inspect = require('object-inspect');
 
+var $TypeError = require('es-errors/type');
+var $SyntaxError = require('es-errors/syntax');
+
 var hasDescriptors = hasPropertyDescriptors();
 var $defineProperty = hasDescriptors && Object.defineProperty;
 
 var hasArrayLengthDefineBug = hasPropertyDescriptors.hasArrayLengthDefineBug();
-
-var $TypeError = TypeError;
-var $SyntaxError = SyntaxError;
 
 /** @type {import('.')} */
 module.exports = function mockProperty(obj, prop, options) {
