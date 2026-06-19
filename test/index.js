@@ -8,17 +8,14 @@ var inspect = require('object-inspect');
 var hasSymbols = require('has-symbols')();
 var gOPD = /** @type {NonNullable<typeof import('gopd')>} */ (require('gopd'));
 
-/** @import MockProperty from '../' */
-
-/** @typedef {NonNullable<Parameters<MockProperty>[2]['get']>} Getter */
-/** @typedef {NonNullable<Parameters<MockProperty>[2]['set']>} Setter */
+/** @import { Getter, Setter } from '../' */
 
 var mockProperty = require('../');
 
 var sentinel = { sentinel: true };
-/** @type {Getter} */
+/** @type {Getter<unknown>} */
 var getter = function () {};
-/** @type {Setter} */
+/** @type {Setter<unknown>} */
 var setter = function (value) { value; }; // eslint-disable-line no-unused-expressions
 
 var props = /** @type {PropertyKey[]} */ ([]).concat(
