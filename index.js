@@ -52,7 +52,7 @@ module.exports = function mockProperty(obj, prop, options) {
 
 	var objIsArray = isArray(obj);
 	var origDescriptor = gOPD
-		? gOPD(obj, /** @type {keyof typeof obj} */ (prop))
+		? gOPD(/** @type {Record<PropertyKey, unknown>} */ (obj), prop)
 		: hasOwn(obj, prop)
 			? {
 				configurable: typeof obj === 'function' && prop === 'name' ? functionsHaveConfigurableNames : true,

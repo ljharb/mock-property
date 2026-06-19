@@ -41,10 +41,10 @@ type MockPropertyOptions<T = unknown> =
     | OptionData<T>
     | OptionAccessor<T>;
 
-declare function mockProperty<T = unknown>(
-    obj: Record<PropertyKey, T | undefined> | T[],
-    prop: PropertyKey,
-    options: MockPropertyOptions<T>,
+declare function mockProperty<O extends object, K extends PropertyKey>(
+    obj: O,
+    prop: K,
+    options: MockPropertyOptions<K extends keyof O ? O[K] : unknown>,
 ): RestoreFunction;
 
 export = mockProperty;
