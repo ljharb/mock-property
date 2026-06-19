@@ -1,14 +1,17 @@
 'use strict';
 
 var test = require('tape');
-var hasPropertyDescriptors = require('has-property-descriptors');
+var hasPropertyDescriptors = require('has-property-descriptors')();
 var v = require('es-value-fixtures');
 var forEach = require('for-each');
 var inspect = require('object-inspect');
 var hasSymbols = require('has-symbols')();
+var gOPD = /** @type {NonNullable<typeof import('gopd')>} */ (require('gopd'));
 
-/** @typedef {NonNullable<Parameters<import('../')>[2]['get']>} Getter */
-/** @typedef {NonNullable<Parameters<import('../')>[2]['set']>} Setter */
+/** @import MockProperty from '../' */
+
+/** @typedef {NonNullable<Parameters<MockProperty>[2]['get']>} Getter */
+/** @typedef {NonNullable<Parameters<MockProperty>[2]['set']>} Setter */
 
 var mockProperty = require('../');
 
@@ -18,14 +21,17 @@ var getter = function () {};
 /** @type {Setter} */
 var setter = function (value) { value; }; // eslint-disable-line no-unused-expressions
 
-// @ts-expect-error TS sucks with concat
-var props = ['string property'].concat(hasSymbols ? Symbol.iterator : []);
+var props = /** @type {PropertyKey[]} */ ([]).concat(
+	'string property',
+	hasSymbols ? Symbol.iterator : []
+);
 
 test('mockProperty', function (t) {
 	t.equal(typeof mockProperty, 'function', 'is a function');
 
 	t.test('errors', function (st) {
-		/** @type {Record<typeof p, unknown>} */ var o = {};
+		/** @type {Record<typeof p, unknown>} */
+		var o = {};
 		var p = 'property';
 
 		forEach(v.nonBooleans, function (nonBoolean) {
@@ -119,7 +125,8 @@ test('mockProperty', function (t) {
 
 	t.test('data -> data', function (st) {
 		forEach(props, function (p) {
-			/** @type {Record<typeof p, unknown>} */ var obj = {};
+			/** @type {Record<typeof p, unknown>} */
+			var obj = {};
 			obj[p] = sentinel;
 
 			st.comment('mockProperty(…): ' + inspect(p));
@@ -138,9 +145,10 @@ test('mockProperty', function (t) {
 		st.end();
 	});
 
-	t.test('data: enumerable -> nonEnumerable', { skip: !hasPropertyDescriptors() }, function (st) {
+	t.test('data: enumerable -> nonEnumerable', { skip: !hasPropertyDescriptors }, function (st) {
 		forEach(props, function (p) {
-			/** @type {Record<typeof p, unknown>} */ var obj = {};
+			/** @type {Record<typeof p, unknown>} */
+			var obj = {};
 			obj[p] = sentinel;
 			st.ok(Object.prototype.propertyIsEnumerable.call(obj, p), 'starts enumerable');
 
@@ -164,7 +172,8 @@ test('mockProperty', function (t) {
 
 	t.test('data -> absent', function (st) {
 		forEach(props, function (p) {
-			/** @type {Record<typeof p, unknown>} */ var obj = {};
+			/** @type {Record<typeof p, unknown>} */
+			var obj = {};
 			obj[p] = sentinel;
 
 			st.comment('mockProperty(…): ' + inspect(p));
@@ -184,7 +193,8 @@ test('mockProperty', function (t) {
 
 	t.test('absent -> data', function (st) {
 		forEach(props, function (p) {
-			/** @type {Record<typeof p, unknown>} */ var obj = {};
+			/** @type {Record<typeof p, unknown>} */
+			var obj = {};
 
 			st.notOk(p in obj, 'property is initially absent');
 
@@ -206,7 +216,8 @@ test('mockProperty', function (t) {
 
 	t.test('absent -> absent', function (st) {
 		forEach(props, function (p) {
-			/** @type {Record<typeof p, unknown>} */ var obj = {};
+			/** @type {Record<typeof p, unknown>} */
+			var obj = {};
 
 			st.notOk(p in obj, 'property is initially absent');
 
@@ -226,9 +237,11 @@ test('mockProperty', function (t) {
 
 	t.test('inherited -> data', function (st) {
 		forEach(props, function (p) {
-			/** @type {Record<typeof p, unknown>} */ var proto = {};
+			/** @type {Record<typeof p, unknown>} */
+			var proto = {};
 			proto[p] = sentinel;
-			/** @type {Record<typeof p, unknown>} */ var obj = Object.create(proto);
+			/** @type {Record<typeof p, unknown>} */
+			var obj = { __proto__: proto };
 
 			st.ok(p in obj, 'property is initially present, via the prototype');
 			st.notOk(Object.prototype.hasOwnProperty.call(obj, p), 'property is not initially an own property');
@@ -241,7 +254,7 @@ test('mockProperty', function (t) {
 			st.equal(proto[p], sentinel, 'the prototype is untouched');
 
 			st.deepEqual(
-				hasPropertyDescriptors() && Object.getOwnPropertyDescriptor(obj, p),
+				hasPropertyDescriptors && gOPD(obj, p),
 				{
 					configurable: true,
 					enumerable: true,
@@ -249,7 +262,7 @@ test('mockProperty', function (t) {
 					writable: true
 				},
 				'has the right descriptor',
-				{ skip: !hasPropertyDescriptors() }
+				{ skip: !hasPropertyDescriptors }
 			);
 
 			st.comment('restore: ' + inspect(p));
@@ -263,14 +276,15 @@ test('mockProperty', function (t) {
 		st.end();
 	});
 
-	t.test('getter', { skip: !hasPropertyDescriptors() }, function (st) {
+	t.test('getter', { skip: !hasPropertyDescriptors }, function (st) {
 		st.test('data: nonconfigurable, nonwritable, change value', function (s2t) {
 			forEach(props, function (p) {
-				/** @type {Record<typeof p, unknown>} */ var o = {};
+				/** @type {Record<typeof p, unknown>} */
+				var o = {};
 				o[p] = sentinel;
 				Object.defineProperty(o, p, { configurable: false, writable: false });
 				s2t.deepEqual(
-					Object.getOwnPropertyDescriptor(o, p),
+					gOPD(o, p),
 					{
 						configurable: false,
 						enumerable: true,
@@ -292,11 +306,12 @@ test('mockProperty', function (t) {
 
 		st.test('data: nonconfigurable, nonwritable, same value', function (s2t) {
 			forEach(props, function (p) {
-				/** @type {Record<typeof p, unknown>} */ var o = {};
+				/** @type {Record<typeof p, unknown>} */
+				var o = {};
 				o[p] = sentinel;
 				Object.defineProperty(o, p, { configurable: false, writable: false });
 				s2t.deepEqual(
-					Object.getOwnPropertyDescriptor(o, p),
+					gOPD(o, p),
 					{
 						configurable: false,
 						enumerable: true,
@@ -317,11 +332,12 @@ test('mockProperty', function (t) {
 
 		st.test('data: nonconfigurable, writable, change value', function (s2t) {
 			forEach(props, function (p) {
-				/** @type {Record<typeof p, unknown>} */ var o = {};
+				/** @type {Record<typeof p, unknown>} */
+				var o = {};
 				o[p] = sentinel;
 				Object.defineProperty(o, p, { configurable: false, writable: true });
 				s2t.deepEqual(
-					Object.getOwnPropertyDescriptor(o, p),
+					gOPD(o, p),
 					{
 						configurable: false,
 						enumerable: true,
@@ -336,7 +352,7 @@ test('mockProperty', function (t) {
 					'writable property can change value: ' + inspect(p)
 				);
 				s2t.deepEqual(
-					Object.getOwnPropertyDescriptor(o, p),
+					gOPD(o, p),
 					{
 						configurable: false,
 						enumerable: true,
@@ -352,11 +368,12 @@ test('mockProperty', function (t) {
 
 		st.test('data: nonconfigurable, writable, change writability', function (s2t) {
 			forEach(props, function (p) {
-				/** @type {Record<typeof p, unknown>} */ var o = {};
+				/** @type {Record<typeof p, unknown>} */
+				var o = {};
 				o[p] = sentinel;
 				Object.defineProperty(o, p, { configurable: false, writable: true });
 				s2t.deepEqual(
-					Object.getOwnPropertyDescriptor(o, p),
+					gOPD(o, p),
 					{
 						configurable: false,
 						enumerable: true,
@@ -378,11 +395,12 @@ test('mockProperty', function (t) {
 
 		st.test('data: nonconfigurable, nonwritable, change writability', function (s2t) {
 			forEach(props, function (p) {
-				/** @type {Record<typeof p, unknown>} */ var o = {};
+				/** @type {Record<typeof p, unknown>} */
+				var o = {};
 				o[p] = sentinel;
 				Object.defineProperty(o, p, { configurable: false, writable: false });
 				s2t.deepEqual(
-					Object.getOwnPropertyDescriptor(o, p),
+					gOPD(o, p),
 					{
 						configurable: false,
 						enumerable: true,
@@ -404,11 +422,12 @@ test('mockProperty', function (t) {
 
 		st.test('data: nonconfigurable, writable, nonenumerable', function (s2t) {
 			forEach(props, function (p) {
-				/** @type {Record<typeof p, unknown>} */ var o = {};
+				/** @type {Record<typeof p, unknown>} */
+				var o = {};
 				o[p] = sentinel;
 				Object.defineProperty(o, p, { configurable: false, enumerable: false, writable: true });
 				s2t.deepEqual(
-					Object.getOwnPropertyDescriptor(o, p),
+					gOPD(o, p),
 					{
 						configurable: false,
 						enumerable: false,
@@ -435,11 +454,12 @@ test('mockProperty', function (t) {
 
 		st.test('data: nonconfigurable, writable, enumerable', function (s2t) {
 			forEach(props, function (p) {
-				/** @type {Record<typeof p, unknown>} */ var o = {};
+				/** @type {Record<typeof p, unknown>} */
+				var o = {};
 				o[p] = sentinel;
 				Object.defineProperty(o, p, { configurable: false, enumerable: true, writable: true });
 				s2t.deepEqual(
-					Object.getOwnPropertyDescriptor(o, p),
+					gOPD(o, p),
 					{
 						configurable: false,
 						enumerable: true,
@@ -466,11 +486,12 @@ test('mockProperty', function (t) {
 
 		st.test('nonconfigurable data -> accessor', function (s2t) {
 			forEach(props, function (p) {
-				/** @type {Record<typeof p, unknown>} */ var o = {};
+				/** @type {Record<typeof p, unknown>} */
+				var o = {};
 				o[p] = sentinel;
 				Object.defineProperty(o, p, { configurable: false });
 				s2t.deepEqual(
-					Object.getOwnPropertyDescriptor(o, p),
+					gOPD(o, p),
 					{
 						configurable: false,
 						enumerable: true,
@@ -504,11 +525,12 @@ test('mockProperty', function (t) {
 
 		st.test('nonconfigurable accessor -> data', function (s2t) {
 			forEach(props, function (p) {
-				/** @type {Record<typeof p, unknown>} */ var o = {};
+				/** @type {Record<typeof p, unknown>} */
+				var o = {};
 				o[p] = sentinel;
 				Object.defineProperty(o, p, { configurable: false, get: getter, set: setter });
 				s2t.deepEqual(
-					Object.getOwnPropertyDescriptor(o, p),
+					gOPD(o, p),
 					{
 						configurable: false,
 						enumerable: true,
@@ -530,11 +552,12 @@ test('mockProperty', function (t) {
 
 		st.test('accessor: nonconfigurable', function (s2t) {
 			forEach(props, function (p) {
-				/** @type {Record<typeof p, unknown>} */ var o = {};
+				/** @type {Record<typeof p, unknown>} */
+				var o = {};
 				o[p] = sentinel;
 				Object.defineProperty(o, p, { configurable: false, get: getter, set: setter });
 				s2t.deepEqual(
-					Object.getOwnPropertyDescriptor(o, p),
+					gOPD(o, p),
 					{
 						configurable: false,
 						enumerable: true,
@@ -579,7 +602,8 @@ test('mockProperty', function (t) {
 		st.test('getter -> getter', function (s2t) {
 			forEach(props, function (p) {
 				var calls = 0;
-				/** @type {Record<typeof p, unknown>} */ var obj = {};
+				/** @type {Record<typeof p, unknown>} */
+				var obj = {};
 				obj[p] = 1;
 				Object.defineProperty(obj, p, {
 					get: function () {
@@ -615,7 +639,8 @@ test('mockProperty', function (t) {
 		st.test('getter -> setter', function (s2t) {
 			forEach(props, function (p) {
 				var calls = 0;
-				/** @type {Record<typeof p, unknown>} */ var obj = {};
+				/** @type {Record<typeof p, unknown>} */
+				var obj = {};
 				obj[p] = 1;
 				Object.defineProperty(obj, p, {
 					get: function () {
@@ -654,7 +679,8 @@ test('mockProperty', function (t) {
 		st.test('getter -> both', function (s2t) {
 			forEach(props, function (p) {
 				var calls = 0;
-				/** @type {Record<typeof p, unknown>} */ var obj = {};
+				/** @type {Record<typeof p, unknown>} */
+				var obj = {};
 				obj[p] = 1;
 				Object.defineProperty(obj, p, {
 					get: function () {
@@ -694,7 +720,8 @@ test('mockProperty', function (t) {
 		st.test('getter -> data', function (s2t) {
 			forEach(props, function (p) {
 				var calls = 0;
-				/** @type {Record<typeof p, unknown>} */ var obj = {};
+				/** @type {Record<typeof p, unknown>} */
+				var obj = {};
 				obj[p] = 1;
 				Object.defineProperty(obj, p, {
 					get: function () {
@@ -725,7 +752,8 @@ test('mockProperty', function (t) {
 		st.test('getter -> absent', function (s2t) {
 			forEach(props, function (p) {
 				var calls = 0;
-				/** @type {Record<typeof p, unknown>} */ var obj = {};
+				/** @type {Record<typeof p, unknown>} */
+				var obj = {};
 				obj[p] = 1;
 				Object.defineProperty(obj, p, {
 					get: function () {
@@ -756,7 +784,8 @@ test('mockProperty', function (t) {
 			forEach(props, function (p) {
 				var calls = 0;
 				var holder;
-				/** @type {Record<typeof p, unknown>} */ var obj = {};
+				/** @type {Record<typeof p, unknown>} */
+				var obj = {};
 				obj[p] = 1;
 				Object.defineProperty(obj, p, {
 					set: function (value) {
@@ -802,7 +831,8 @@ test('mockProperty', function (t) {
 			forEach(props, function (p) {
 				var calls = 0;
 				var holder;
-				/** @type {Record<typeof p, unknown>} */ var obj = {};
+				/** @type {Record<typeof p, unknown>} */
+				var obj = {};
 				obj[p] = 1;
 				Object.defineProperty(obj, p, {
 					set: function (value) {
@@ -842,7 +872,8 @@ test('mockProperty', function (t) {
 
 		st.test('setter -> setter', function (s2t) {
 			forEach(props, function (p) {
-				/** @type {Record<typeof p, unknown>} */ var obj = {};
+				/** @type {Record<typeof p, unknown>} */
+				var obj = {};
 				obj[p] = 1;
 				var holder;
 				Object.defineProperty(obj, p, {
@@ -879,7 +910,8 @@ test('mockProperty', function (t) {
 
 		st.test('setter -> data', function (s2t) {
 			forEach(props, function (p) {
-				/** @type {Record<typeof p, unknown>} */ var obj = {};
+				/** @type {Record<typeof p, unknown>} */
+				var obj = {};
 				obj[p] = 1;
 				var holder;
 				Object.defineProperty(obj, p, {
@@ -918,7 +950,8 @@ test('mockProperty', function (t) {
 
 		st.test('setter -> absent', function (s2t) {
 			forEach(props, function (p) {
-				/** @type {Record<typeof p, unknown>} */ var obj = {};
+				/** @type {Record<typeof p, unknown>} */
+				var obj = {};
 				obj[p] = 1;
 				var holder;
 				Object.defineProperty(obj, p, {
@@ -952,7 +985,8 @@ test('mockProperty', function (t) {
 		st.test('data -> getter', function (s2t) {
 			forEach(props, function (p) {
 				var calls = 0;
-				/** @type {Record<typeof p, unknown>} */ var obj = {};
+				/** @type {Record<typeof p, unknown>} */
+				var obj = {};
 				obj[p] = sentinel;
 
 				s2t.ok(p in obj, 'property ' + inspect(p) + ' exists');
@@ -986,7 +1020,8 @@ test('mockProperty', function (t) {
 
 		st.test('data -> setter', function (s2t) {
 			forEach(props, function (p) {
-				/** @type {Record<typeof p, unknown>} */ var obj = {};
+				/** @type {Record<typeof p, unknown>} */
+				var obj = {};
 				obj[p] = sentinel;
 
 				s2t.ok(p in obj, 'property ' + inspect(p) + ' exists');
@@ -1019,7 +1054,8 @@ test('mockProperty', function (t) {
 		st.test('data -> both', function (s2t) {
 			forEach(props, function (p) {
 				var calls = 0;
-				/** @type {Record<typeof p, unknown>} */ var obj = {};
+				/** @type {Record<typeof p, unknown>} */
+				var obj = {};
 				obj[p] = sentinel;
 
 				s2t.ok(p in obj, 'property ' + inspect(p) + ' exists');
@@ -1056,7 +1092,8 @@ test('mockProperty', function (t) {
 		st.test('absent -> getter', function (s2t) {
 			forEach(props, function (p) {
 				var calls = 0;
-				/** @type {Record<typeof p, unknown>} */ var obj = {};
+				/** @type {Record<typeof p, unknown>} */
+				var obj = {};
 
 				s2t.notOk(p in obj, 'property ' + inspect(p) + ' does not exist');
 
@@ -1082,7 +1119,8 @@ test('mockProperty', function (t) {
 
 		st.test('absent -> setter', function (s2t) {
 			forEach(props, function (p) {
-				/** @type {Record<typeof p, unknown>} */ var obj = {};
+				/** @type {Record<typeof p, unknown>} */
+				var obj = {};
 
 				s2t.notOk(p in obj, 'property ' + inspect(p) + ' does not exist');
 
@@ -1111,7 +1149,8 @@ test('mockProperty', function (t) {
 		st.test('absent -> both', function (s2t) {
 			forEach(props, function (p) {
 				var calls = 0;
-				/** @type {Record<typeof p, unknown>} */ var obj = {};
+				/** @type {Record<typeof p, unknown>} */
+				var obj = {};
 
 				s2t.notOk(p in obj, 'property ' + inspect(p) + ' does not exist');
 
@@ -1145,7 +1184,8 @@ test('mockProperty', function (t) {
 			forEach(props, function (p) {
 				var calls = 0;
 				var holder;
-				/** @type {Record<typeof p, unknown>} */ var obj = {};
+				/** @type {Record<typeof p, unknown>} */
+				var obj = {};
 				obj[p] = 1;
 				Object.defineProperty(obj, p, {
 					get: function () {
@@ -1185,7 +1225,8 @@ test('mockProperty', function (t) {
 			forEach(props, function (p) {
 				var calls = 0;
 				var holder;
-				/** @type {Record<typeof p, unknown>} */ var obj = {};
+				/** @type {Record<typeof p, unknown>} */
+				var obj = {};
 				obj[p] = sentinel;
 				Object.defineProperty(obj, p, {
 					get: function () {
@@ -1232,7 +1273,8 @@ test('mockProperty', function (t) {
 			forEach(props, function (p) {
 				var calls = 0;
 				var holder;
-				/** @type {Record<typeof p, unknown>} */ var obj = {};
+				/** @type {Record<typeof p, unknown>} */
+				var obj = {};
 				obj[p] = 1;
 				Object.defineProperty(obj, p, {
 					get: function () {

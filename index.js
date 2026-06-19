@@ -52,7 +52,7 @@ module.exports = function mockProperty(obj, prop, options) {
 
 	var objIsArray = isArray(obj);
 	var origDescriptor = gOPD
-		? gOPD(obj, prop)
+		? gOPD(obj, /** @type {keyof typeof obj} */ (prop))
 		: hasOwn(obj, prop)
 			? {
 				configurable: typeof obj === 'function' && prop === 'name' ? functionsHaveConfigurableNames : true,
@@ -130,7 +130,6 @@ module.exports = function mockProperty(obj, prop, options) {
 
 		if (wantsData) {
 			defineDataProperty(
-				// eslint-disable-next-line no-extra-parens
 				/** @type {Record<PropertyKey, unknown>} */ (obj),
 				prop,
 				hasOwn(options, 'value') ? options.value : origDescriptor && origDescriptor.value,
@@ -142,7 +141,6 @@ module.exports = function mockProperty(obj, prop, options) {
 			var setter = hasOwn(options, 'set') ? options.set : origDescriptor && origDescriptor.set;
 
 			/** @type {Exclude<typeof $defineProperty, false>} */
-			// eslint-disable-next-line no-extra-parens
 			($defineProperty)(obj, prop, {
 				configurable: origConfigurable,
 				enumerable: newEnumerable,
@@ -151,7 +149,6 @@ module.exports = function mockProperty(obj, prop, options) {
 			});
 		} else {
 			defineDataProperty(
-				// eslint-disable-next-line no-extra-parens
 				/** @type {Record<PropertyKey, unknown>} */ (obj),
 				prop,
 				origDescriptor && origDescriptor.value,
@@ -167,7 +164,6 @@ module.exports = function mockProperty(obj, prop, options) {
 		} else if ($defineProperty) {
 			if (hasOwn(origDescriptor, 'writable')) {
 				defineDataProperty(
-					// eslint-disable-next-line no-extra-parens
 					/** @type {Record<PropertyKey, unknown>} */ (obj),
 					prop,
 					origDescriptor.value,

@@ -8,6 +8,7 @@
 		"id-length": 0,
 		"max-lines-per-function": 0,
 		"max-statements": 0,
+		"no-extra-parens": 0,
 	},
 
 	"overrides": [
