@@ -135,7 +135,7 @@ module.exports = function mockProperty(obj, prop, options) {
 				prop,
 				hasOwn(options, 'value') ? options.value : origDescriptor && origDescriptor.value,
 				!newEnumerable,
-				hasOwn(options, 'nonWritable') ? options.nonWritable : hasOwn(origDescriptor, 'writable') ? !origDescriptor.writable : false
+				hasOwn(options, 'nonWritable') ? options.nonWritable : origDescriptor && hasOwn(origDescriptor, 'writable') ? !origDescriptor.writable : false
 			);
 		} else if (wantsAccessor) {
 			var getter = hasOwn(options, 'get') ? options.get : origDescriptor && origDescriptor.get;

@@ -224,6 +224,45 @@ test('mockProperty', function (t) {
 		st.end();
 	});
 
+	t.test('inherited -> data', function (st) {
+		forEach(props, function (p) {
+			/** @type {Record<typeof p, unknown>} */ var proto = {};
+			proto[p] = sentinel;
+			/** @type {Record<typeof p, unknown>} */ var obj = Object.create(proto);
+
+			st.ok(p in obj, 'property is initially present, via the prototype');
+			st.notOk(Object.prototype.hasOwnProperty.call(obj, p), 'property is not initially an own property');
+
+			st.comment('mockProperty(…): ' + inspect(p));
+			var restore = mockProperty(obj, p, { value: obj });
+
+			st.ok(p in obj, 'property still exists');
+			st.equal(obj[p], obj, 'obj has the mocked value');
+			st.equal(proto[p], sentinel, 'the prototype is untouched');
+
+			st.deepEqual(
+				hasPropertyDescriptors() && Object.getOwnPropertyDescriptor(obj, p),
+				{
+					configurable: true,
+					enumerable: true,
+					value: obj,
+					writable: true
+				},
+				'has the right descriptor',
+				{ skip: !hasPropertyDescriptors() }
+			);
+
+			st.comment('restore: ' + inspect(p));
+			restore();
+
+			st.ok(p in obj, 'property is restored, via the prototype');
+			st.notOk(Object.prototype.hasOwnProperty.call(obj, p), 'mocked own property is removed on restore');
+			st.equal(obj[p], sentinel, 'inherited value is visible again');
+		});
+
+		st.end();
+	});
+
 	t.test('getter', { skip: !hasPropertyDescriptors() }, function (st) {
 		st.test('data: nonconfigurable, nonwritable, change value', function (s2t) {
 			forEach(props, function (p) {
