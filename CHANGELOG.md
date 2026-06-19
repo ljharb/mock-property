@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.1.1](https://github.com/ljharb/mock-property/compare/v1.1.0...v1.1.1) - 2026-06-19
+
+### Commits
+
+- [types] some cleanup [`9fee08c`](https://github.com/ljharb/mock-property/commit/9fee08c13017911c3d7d27396608a24fdb8f657d)
+- [actions] update workflows [`ce6fe01`](https://github.com/ljharb/mock-property/commit/ce6fe01b7ed547941cca3d3640f052148862f887)
+- [Fix] avoid a crash with a non-own inherited property [`44d670f`](https://github.com/ljharb/mock-property/commit/44d670f401e13d9d3c1041bd40cdc59010145eda)
+- [Dev Deps] update `@arethetypeswrong/cli`, `@ljharb/eslint-config`, `@ljharb/tsconfig`, `@types/isarray`, `auto-changelog`, `es-value-fixtures`, `eslint`, `for-each`, `has-symbols`, `npmignore`, `tape` [`ceb91d4`](https://github.com/ljharb/mock-property/commit/ceb91d4bbccc43a636fc3b4d947f2bc780047276)
+- [Deps] update `gopd`, `hasown`, `object-inspect` [`1db4729`](https://github.com/ljharb/mock-property/commit/1db47297fa392531d446acf7b45de0272ff467cd)
+- [Dev Deps] update `@types/node` [`f20af9c`](https://github.com/ljharb/mock-property/commit/f20af9cb4e59250d70f34724ba97b3a91b29988a)
+- [meta] fix run-script quote escaping [`9b1c082`](https://github.com/ljharb/mock-property/commit/9b1c08251690dadb6aecf44f33eec4222eb9be5e)
+- [readme] replace runkit CI badge with shields.io check-runs badge [`e9f8b10`](https://github.com/ljharb/mock-property/commit/e9f8b106499390e00defedebc9c68a09f7647adb)
+- [Dev Deps] update `@arethetypeswrong/cli` [`c8f6ee4`](https://github.com/ljharb/mock-property/commit/c8f6ee4a0f1ca8e426789b6614ed983f82e66089)
+
 ## [v1.1.0](https://github.com/ljharb/mock-property/compare/v1.0.3...v1.1.0) - 2024-08-06
 
 ### Commits
